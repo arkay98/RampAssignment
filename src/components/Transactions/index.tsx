@@ -16,11 +16,9 @@ export const Transactions: TransactionsComponent = ({ transactions }) => {
     },
     [fetchWithoutCache]
   )
-
   if (transactions === null) {
     return <div className="RampLoading--container">Loading...</div>
   }
-
   return (
     <div data-testid="transaction-container">
       {transactions.map((transaction) => (
