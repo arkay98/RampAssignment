@@ -17,7 +17,6 @@ export function InputSelect<TItem>({
     top: 0,
     left: 0,
   })
-  console.log("items",selectedValue,dropdownPosition)
   const onChange = useCallback<InputSelectOnChange<TItem>>(
     (selectedItem) => {
       if (selectedItem === null) {
@@ -47,9 +46,10 @@ export function InputSelect<TItem>({
         getToggleButtonProps,
         inputValue,
       }) => {
+
         const toggleProps = getToggleButtonProps()
         const parsedSelectedItem = selectedItem === null ? null : parseItem(selectedItem)
-
+        
         return (
           <div className="RampInputSelect--root">
             <label className="RampText--s RampText--hushed" {...getLabelProps()}>
@@ -79,16 +79,13 @@ export function InputSelect<TItem>({
         )
 
         function renderItems() {
+
           if (!isOpen) {
             return null
           }
-
-          if (isLoading) {
-            return <div className="RampInputSelect--dropdown-item">{loadingLabel}...</div>
-          }
-
+          //bug 5 combained
           if (items.length === 0) {
-            return <div className="RampInputSelect--dropdown-item">No items</div>
+            return <div className="RampInputSelect--dropdown-item">{loadingLabel}...</div>
           }
 
           return items.map((item, index) => {

@@ -13,7 +13,6 @@ export function App() {
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
-console.log("emp",employees,paginatedTransactions,transactionsByEmployee);
   const transactions = useMemo(
     () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
     [paginatedTransactions, transactionsByEmployee]
@@ -23,9 +22,8 @@ console.log("emp",employees,paginatedTransactions,transactionsByEmployee);
     setIsLoading(true)
     transactionsByEmployeeUtils.invalidateData()
 
-    await employeeUtils.fetchAll()
+    await employeeUtils.fetchAll();
     await paginatedTransactionsUtils.fetchAll()
-
     setIsLoading(false)
   }, [employeeUtils, paginatedTransactionsUtils, transactionsByEmployeeUtils])
 
@@ -36,13 +34,13 @@ console.log("emp",employees,paginatedTransactions,transactionsByEmployee);
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
   )
-
+console.log(transactions)
   useEffect(() => {
     if (employees === null && !employeeUtils.loading) {
       loadAllTransactions()
     }
   }, [employeeUtils.loading, employees, loadAllTransactions])
-
+  
   return (
     <Fragment>
       <main className="MainContainer">
@@ -59,8 +57,10 @@ console.log("emp",employees,paginatedTransactions,transactionsByEmployee);
           parseItem={(item) => ({
             value: item.id,
             label: `${item.firstName} ${item.lastName}`,
-          })}
+          }
+          )}
           onChange={async (newValue) => {
+            
             if (newValue === null) {
               return
             }
@@ -76,13 +76,16 @@ console.log("emp",employees,paginatedTransactions,transactionsByEmployee);
 
         <div className="RampGrid">
           <Transactions transactions={transactions} />
-
-          {transactions !== null && (
+          
+          {paginatedTransactions?.nextPage  && (
+            //bug 6 solved
             <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
               onClick={async () => {
-                await loadAllTransactions()
+                console.log("ashwin")
+                await loadAllTransactions()   
+                   
               }}
             >
               View More
