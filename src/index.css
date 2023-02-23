@@ -89,7 +89,7 @@ hr.RampBreak--l {
   border-bottom: 1px solid var(--color-text);
   cursor: pointer;
 }
-
+/*bug 1 fix*/
 .RampInputSelect--dropdown-container {
   display: none;
   position: absolute;

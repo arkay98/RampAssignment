@@ -83,9 +83,11 @@ export function InputSelect<TItem>({
           if (!isOpen) {
             return null
           }
-          //bug 5 combained
-          if (items.length === 0) {
+          if (isLoading) {
             return <div className="RampInputSelect--dropdown-item">{loadingLabel}...</div>
+          }
+          if (items.length === 0) {
+            return <div className="RampInputSelect--dropdown-item">No items</div>
           }
 
           return items.map((item, index) => {

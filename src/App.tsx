@@ -12,19 +12,20 @@ export function App() {
   const { data: employees, ...employeeUtils } = useEmployees()
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const transactions = useMemo(
-    () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
+    () => paginatedTransactions?.data ?? transactionsByEmployee ??null,
     [paginatedTransactions, transactionsByEmployee]
   )
 
   const loadAllTransactions = useCallback(async () => {
     setIsLoading(true)
     transactionsByEmployeeUtils.invalidateData()
-
+    
     await employeeUtils.fetchAll();
-    await paginatedTransactionsUtils.fetchAll()
     setIsLoading(false)
+    await paginatedTransactionsUtils.fetchAll()
+  
   }, [employeeUtils, paginatedTransactionsUtils, transactionsByEmployeeUtils])
 
   const loadTransactionsByEmployee = useCallback(
@@ -34,13 +35,12 @@ export function App() {
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
   )
-console.log(transactions)
   useEffect(() => {
     if (employees === null && !employeeUtils.loading) {
       loadAllTransactions()
     }
   }, [employeeUtils.loading, employees, loadAllTransactions])
-  
+  console.log('t',transactions)
   return (
     <Fragment>
       <main className="MainContainer">
@@ -59,21 +59,17 @@ console.log(transactions)
             label: `${item.firstName} ${item.lastName}`,
           }
           )}
-          onChange={async (newValue) => {
-            
+          onChange={async (newValue) => {   
+            console.log("changing")
             if (newValue === null) {
               return
             }
-            if(newValue.id){
-              await loadTransactionsByEmployee(newValue.id)
-            }else{
-              loadAllTransactions()
-            }
+            newValue.id ? await loadTransactionsByEmployee(newValue.id) : loadAllTransactions(); 
           }}
         />
 
         <div className="RampBreak--l" />
-
+          
         <div className="RampGrid">
           <Transactions transactions={transactions} />
           
@@ -83,9 +79,7 @@ console.log(transactions)
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
               onClick={async () => {
-                console.log("ashwin")
-                await loadAllTransactions()   
-                   
+                await loadAllTransactions()    
               }}
             >
               View More

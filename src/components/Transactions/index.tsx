@@ -16,6 +16,7 @@ export const Transactions: TransactionsComponent = ({ transactions }) => {
     },
     [fetchWithoutCache]
   )
+  console.log("t1",transactions)
   if (transactions === null) {
     return <div className="RampLoading--container">Loading...</div>
   }
